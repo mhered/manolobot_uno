@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+    <!-- MATERIALS -->
+    <!-- white black light_gray dark_gray green blue red yellow orange -->
+    <xacro:include filename="materials.xacro" />
+
+    <!-- PROPERTIES -->
+
+    <xacro:property name="L_x" value="0.29"/> <!-- box length -->
+    <xacro:property name="L_y" value="0.19"/> <!-- box width -->
+    <xacro:property name="L_z" value="0.124"/> <!-- box height -->
+
+    <xacro:property name="x_w" value="0.066"/> <!-- wheel axis x-offset from centre -->
+    <xacro:property name="z_w" value="0.022"/> <!-- wheel axis z-offset from bottom -->
+    <xacro:property name="y_w" value="0.122"/> <!-- wheel half separation -->
+    
+    <xacro:property name="W_D" value="0.065"/> <!-- wheel diameter -->
+    <xacro:property name="W_h" value="0.026"/> <!-- wheel width -->
+
+    <xacro:property name="x_c" value="0.024"/> <!-- caster centre x-offset from edge -->
+    <xacro:property name="y_c" value="0.024"/> <!-- caster centre y-offset from edge -->
+    <xacro:property name="z_c" value="0.052"/> <!-- caster contact z-offset from bottom -->
+
+    <xacro:property name="c_D" value="0.016"/> <!-- caster diameter -->
+
+
+
+    <!-- BASE LINK -->  
+    
+    <link name="base_link">
+    </link>
+
+    <!-- CHASSIS LINK --> 
+
+    <joint name="chassis_joint" type = "fixed">
+        <parent link="base_link" />
+        <child link="chassis_link" />
+        <origin xyz="${x_w-L_x/2} 0 ${z_w}" />
+    </joint>
+    
+    <link name="chassis_link">
+        <visual>
+            <geometry>
+                <box size="${L_x} ${L_y} ${L_z}"/>
+            </geometry>
+            <origin xyz="${L_x/2} 0 ${L_z/2}" />
+            <material name="light_gray" />
+        </visual>
+        
+    </link>
+
+    <!-- LEFT WHEEL LINK --> 
+
+    <joint name="left_wheel_joint" type = "continuous">
+        <parent link="base_link" />
+        <child link="left_wheel_link" />
+        <origin xyz="0 ${y_w} 0" rpy="-${pi/2} 0 0" />
+        <axis xyz="0 0 1" />
+    </joint>
+    
+    <link name="left_wheel_link">
+        <visual>
+            <geometry>
+                <cylinder radius="${W_D/2}" length="${W_h}" />
+            </geometry>
+            <material name="dark_gray" />
+        </visual>
+        
+    </link>
+
+    <!-- RIGHT WHEEL LINK --> 
+
+    <joint name="right_wheel_joint" type = "continuous">
+        <parent link="base_link" />
+        <child link="right_wheel_link" />
+        <origin xyz="0 -${y_w} 0" rpy="${pi/2} 0 0" />
+        <axis xyz="0 0 -1" />
+    </joint>
+    
+    <link name="right_wheel_link">
+        <visual>
+            <geometry>
+                <cylinder radius="${W_D/2}" length="${W_h}" />
+            </geometry>
+            <material name="dark_gray" />
+        </visual>
+        
+    </link>
+
+<!-- LEFT CASTER WHEEL LINK --> 
+
+    <joint name="left_caster_wheel_joint" type = "fixed">
+        <parent link="chassis_link" />
+        <child link="left_caster_wheel_link" />
+        <origin xyz="${L_x-x_c} ${L_y/2-y_c} -${z_c}" />
+    </joint>
+    
+    <link name="left_caster_wheel_link">
+        <visual>
+            <geometry>
+                <sphere radius="${c_D/2}" />
+            </geometry>
+            <material name="light_gray" />
+        </visual>
+        
+    </link>
+
+<!-- RIGHT CASTER WHEEL LINK --> 
+
+    <joint name="right_caster_wheel_joint" type = "fixed">
+        <parent link="chassis_link" />
+        <child link="right_caster_wheel_link" />
+        <origin xyz="${L_x-x_c} ${-L_y/2+y_c} -${z_c}" />
+    </joint>
+    
+    <link name="right_caster_wheel_link">
+        <visual>
+            <geometry>
+                <sphere radius="${c_D/2}" />
+            </geometry>
+            <material name="light_gray" />
+        </visual>
+        
+    </link>
+
+</robot>
